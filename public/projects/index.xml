@@ -8,13 +8,12 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 17 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Session 6: Homework 3</title>
-      <link>/projects/project1/homework3/</link>
+      <title>IMDB ratings</title>
+      <link>/projects/project1/</link>
       <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>/projects/project1/homework3/</guid>
-      <description>Youth Risk Behavior Surveillance Load the data ?yrbss
-data(yrbss) glimpse(yrbss) ## Rows: 13,583 ## Columns: 13 ## $ age &amp;lt;int&amp;gt; 14, 14, 15, 15, 15, 15, 15, 14, 15, 15, 15, … ## $ gender &amp;lt;chr&amp;gt; &amp;quot;female&amp;quot;, &amp;quot;female&amp;quot;, &amp;quot;female&amp;quot;, &amp;quot;female&amp;quot;, &amp;quot;fem… ## $ grade &amp;lt;chr&amp;gt; &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;, &amp;quot;9&amp;quot;,… ## $ hispanic &amp;lt;chr&amp;gt; &amp;quot;not&amp;quot;, &amp;quot;not&amp;quot;, &amp;quot;hispanic&amp;quot;, &amp;quot;not&amp;quot;, &amp;quot;not&amp;quot;, &amp;quot;not… ## $ race &amp;lt;chr&amp;gt; &amp;quot;Black or African American&amp;quot;, &amp;quot;Black or Afric… ## $ height &amp;lt;dbl&amp;gt; NA, NA, 1.</description>
+      <guid>/projects/project1/</guid>
+      <description>IMDB ratings: Differences between directors movies &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;movies.csv&amp;quot;)) glimpse(movies) ## Rows: 2,961 ## Columns: 11 ## $ title &amp;lt;chr&amp;gt; &amp;quot;Avatar&amp;quot;, &amp;quot;Titanic&amp;quot;, &amp;quot;Jurassic World&amp;quot;, &amp;quot;The Aveng… ## $ genre &amp;lt;chr&amp;gt; &amp;quot;Action&amp;quot;, &amp;quot;Drama&amp;quot;, &amp;quot;Action&amp;quot;, &amp;quot;Action&amp;quot;, &amp;quot;Action&amp;quot;, … ## $ director &amp;lt;chr&amp;gt; &amp;quot;James Cameron&amp;quot;, &amp;quot;James Cameron&amp;quot;, &amp;quot;Colin Trevorro… ## $ year &amp;lt;dbl&amp;gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 2015, 2… ## $ duration &amp;lt;dbl&amp;gt; 178, 194, 124, 173, 152, 136, 125, 141, 164, 93, … ## $ gross &amp;lt;dbl&amp;gt; 7.</description>
     </item>
     
   </channel>
