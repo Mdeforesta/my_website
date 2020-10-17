@@ -82,7 +82,7 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, my name is Maximilien"
-    subtitle = "Welcome to my website, I have some exciting projects to share with you."
+    subtitle = "Welcome to my website, I have some amazing projects to share with you."
     buttonText = "Get Started"
 
 
@@ -93,13 +93,13 @@ disqusShortname = ""
     
     [[params.tiles.showcase]]
       title = "Project 1"
-      subtitle = "Ipsum Dolor Sit Amet"
+      subtitle = "Homework 1"
       image = "pic01.jpg"
-      url = "blogs/aliquam"
+      url = "projects/project1"
 
     [[params.tiles.showcase]]
       title = "Project 2"
-      subtitle = "Feugiat Amet Tempus"
+      subtitle = "Homework 2"
       image = "pic02.jpg"
       url = "blogs/tempus"
 
