@@ -1,0 +1,132 @@
+---
+title: "Climate change and anomalies"
+author: "Max"
+date: "2020-10-20"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+
+<p>Let’s look at some temperature anomalies, based on some data compiled by the NASA for the period 1951-1980.</p>
+<div id="climate-change-and-temperature-anomalies" class="section level1">
+<h1>Climate change and temperature anomalies</h1>
+<pre class="r"><code>weather &lt;- read_csv(&quot;https://data.giss.nasa.gov/gistemp/tabledata_v3/NH.Ts+dSST.csv&quot;, 
+           skip = 1, 
+           na = &quot;***&quot;)</code></pre>
+<pre class="r"><code>tidyweather&lt;-weather %&gt;%
+  select(Year:Dec)%&gt;%
+ pivot_longer(!Year, names_to = &quot;Month&quot;, values_to = &quot;delta&quot;)</code></pre>
+<div id="plotting-information" class="section level2">
+<h2>Plotting Information</h2>
+<pre class="r"><code>tidyweather &lt;- tidyweather %&gt;%
+  mutate(date = ymd(paste(as.character(Year), Month, &quot;1&quot;)),
+         month = month(date, label=TRUE),
+         year = year(date))
+
+ggplot(tidyweather, aes(x=date, y = delta))+
+  geom_point()+
+  geom_smooth(color=&quot;red&quot;) +
+  theme_bw() +
+  labs (
+    title = &quot;Weather Anomalies&quot;
+  )</code></pre>
+<p><img src="/projects/project3/index_files/figure-html/scatter_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>month.order &lt;- c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;)
+tidyweather$Month = factor(tidyweather$Month, levels = month.order)
+
+ggplot(tidyweather, aes(x=date, y = delta))+
+  geom_point()+
+  geom_smooth(color=&quot;red&quot;) +
+  theme_bw() +
+  labs (
+    title = &quot;Weather Anomalies by month&quot;
+  )+
+  facet_wrap(~Month)</code></pre>
+<p><img src="/projects/project3/index_files/figure-html/facet_wrap-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>comparison &lt;- tidyweather %&gt;% 
+  filter(Year&gt;= 1881) %&gt;%     #remove years prior to 1881
+  #create new variable &#39;interval&#39;, and assign values based on criteria below:
+  mutate(interval = case_when(
+    Year %in% c(1881:1920) ~ &quot;1881-1920&quot;,
+    Year %in% c(1921:1950) ~ &quot;1921-1950&quot;,
+    Year %in% c(1951:1980) ~ &quot;1951-1980&quot;,
+    Year %in% c(1981:2010) ~ &quot;1981-2010&quot;,
+    TRUE ~ &quot;2011-present&quot;
+  ))</code></pre>
+<pre class="r"><code>ggplot(comparison, aes(x=delta, fill=interval))+
+  geom_density(alpha=0.2) +   #density plot with tranparency set to 20%
+  theme_bw() +                #theme
+  labs (
+    title = &quot;Density Plot for Monthly Temperature Anomalies&quot;,
+    y     = &quot;Density&quot;         #changing y-axis label to sentence case
+  )</code></pre>
+<p><img src="/projects/project3/index_files/figure-html/density_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#creating yearly averages
+average_annual_anomaly &lt;- tidyweather %&gt;% 
+  group_by(Year) %&gt;%   #grouping data by Year
+  
+  # creating summaries for mean delta 
+  # use `na.rm=TRUE` to eliminate NA (not available) values 
+  summarise(annual_average_delta = mean(delta, na.rm=TRUE)) 
+
+#plotting the data:
+ggplot(average_annual_anomaly, aes(x=Year, y= annual_average_delta))+
+  geom_point()+
+  
+  #Fit the best fit line, using LOESS method
+  geom_smooth() +
+  
+  #change to theme_bw() to have white background + black frame around plot
+  theme_bw() +
+  labs (
+    title = &quot;Average Yearly Anomaly&quot;,
+    y     = &quot;Average Annual Delta&quot;
+  )                         </code></pre>
+<p><img src="/projects/project3/index_files/figure-html/averaging-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+<div id="confidence-interval-for-delta" class="section level2">
+<h2>Confidence Interval for <code>delta</code></h2>
+<pre class="r"><code>formula_ci &lt;- comparison %&gt;% 
+  filter(interval == &quot;2011-present&quot;)%&gt;%
+  
+
+  # choose the interval 2011-present
+  # what dplyr verb will you use? 
+
+  # calculate summary statistics for temperature deviation (delta) 
+  # calculate mean, SD, count, SE, lower/upper 95% CI
+  # what dplyr verb will you use? 
+
+
+   summarise(mean_delta = mean(delta , na.rm = TRUE), SD = sd(delta, na.rm = TRUE),count=n(), SE=SD/sqrt(count), lower_ci = mean_delta - 1.96 * SE, upper_ci = mean_delta + 1.96*SE)
+ 
+ 
+
+#print out formula_CI
+formula_ci</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   mean_delta    SD count     SE lower_ci upper_ci
+##        &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1      0.966 0.262   108 0.0252    0.916     1.02</code></pre>
+<pre class="r"><code>bootstrap &lt;- comparison %&gt;%
+  filter(interval == &quot;2011-present&quot;)%&gt;%
+  specify(response = delta)%&gt;%
+  generate(reps= 10000, type= &quot;bootstrap&quot;)%&gt;%
+  calculate(stat = &quot;mean&quot;)%&gt;%
+  get_ci(level=.95, type = &quot;percentile&quot;)
+
+bootstrap</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   lower_ci upper_ci
+##      &lt;dbl&gt;    &lt;dbl&gt;
+## 1    0.916     1.02</code></pre>
+<p>From 2011 to present data the average change in the temperature is 0.966. After the filter function, we are left with 108 counts of data. There is a 95% chance of delta mean being in between 0.917 (lower confidence interval) and 1.02 (upper confidence interval). The deviation from the mean is 0.262. Standard error of 0.0252 indicates that the true population mean can be off by 0.0252 than the mean that we found.</p>
+</div>
+</div>

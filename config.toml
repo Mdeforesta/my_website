@@ -82,7 +82,7 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, my name is Maximilien"
-    subtitle = "Welcome to my website, I have some amazing projects to share with you."
+    subtitle = "Welcome to my website, I have some interesting projects to share with you."
     buttonText = "Get Started"
 
 
@@ -93,27 +93,27 @@ disqusShortname = ""
     
     [[params.tiles.showcase]]
       title = "Project 1"
-      subtitle = "Homework 1"
-      image = "pic01.jpg"
+      subtitle = "IMDB ratings"
+      image = "burton.jpg"
       url = "projects/project1"
 
     [[params.tiles.showcase]]
       title = "Project 2"
-      subtitle = "Homework 2"
-      image = "pic02.jpg"
-      url = "blogs/tempus"
+      subtitle = "Physical Activity and Weight"
+      image = "sports.jpg"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/magna"
+      title = "Project 3"
+      subtitle = "Climate Change"
+      image = "change.jpg"
+      url = "projects/project3"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
-      url = "blogs/ipsum"
+     title = "Project 4"
+      subtitle = "Email Usage"
+      image = "email.jpg"
+      url = "projects/project4"
 
 
     # You can make more showcases by copy and pasting the code above
@@ -127,15 +127,15 @@ disqusShortname = ""
 
   # Section Type Two
   [params.two]
-    enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "blogs"
+  #  enable = true
+  # title = "Massa libero"
+   # subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
+    #Mauris aliquet magna magna sed nunc rhoncus pharetra. 
+    #Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
+    #Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
+    #Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
+    #buttonText = "Get Started"
+    #url = "blogs"
 
 
   # Contact section

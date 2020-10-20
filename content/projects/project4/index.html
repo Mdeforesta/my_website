@@ -1,0 +1,73 @@
+---
+title: "Email Usage"
+author: "Max"
+date: "2020-10-20"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+
+<p>Let’s look at how much time American people spend looking at their emails.</p>
+<div id="general-social-survey-gss" class="section level1">
+<h1>General Social Survey (GSS)</h1>
+<pre class="r"><code>gss &lt;- read_csv(here::here(&quot;data&quot;, &quot;smallgss2016.csv&quot;), 
+                na = c(&quot;&quot;, &quot;Don&#39;t know&quot;,
+                       &quot;No answer&quot;, &quot;Not applicable&quot;))</code></pre>
+<div id="email-usage" class="section level2">
+<h2>Email usage</h2>
+<pre class="r"><code>gss$emailmin&lt;-as.numeric(gss$emailmin)
+gss$emailhr&lt;-as.numeric(gss$emailhr)
+gss$email &lt;- rowSums(cbind(gss$emailmin,gss$emailhr*60),na.rm=T)
+gss =  gss %&gt;%
+  na.omit(emailmin)</code></pre>
+<pre class="r"><code>mean.email = mean(gss$email)
+median.email= median(gss$email)
+ggplot(gss, aes(x = email)) +
+  geom_density(colour = &quot;blue&quot;, fill = &quot;lightblue&quot;)+
+  geom_vline(xintercept = mean.email, size = 0.5, colour = &quot;red&quot;) +       #add mean line
+    geom_vline(xintercept = median.email, size = 0.5, colour = &quot;green&quot;)+geom_text(aes(x=mean.email+270, label=paste0(&quot;Mean\n&quot;, round(mean.email,1)), y=0.0025)) + #add label to mean
+    geom_text(aes(x=median.email, label=paste0(&quot;Median\n&quot;, median.email), y=0.0005)) + #add label to median
+    theme_bw() +
+    labs(title = &quot;Most emails answered in 8 hours&quot;,
+         x = &quot;Minutes&quot;,
+         y = &quot;Density&quot;)</code></pre>
+<p><img src="/projects/project4/index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Median is a better measure of typical among of time Americans spend on email weekly since the density of median is higher than that of mean.</p>
+<pre class="r"><code>bootstrap &lt;- gss %&gt;%
+  specify(response = email)%&gt;%
+  generate(reps= 1000, type= &quot;bootstrap&quot;)%&gt;%
+  calculate(stat = &quot;mean&quot;)%&gt;%
+  get_ci(level=.95, type = &quot;percentile&quot;)
+
+bootstrap$lower_ci &lt;- bootstrap$lower_ci/60
+bootstrap$upper_ci &lt;- bootstrap$upper_ci/60
+
+
+lower_ci &lt;- bootstrap %&gt;%
+  summarise (lower_ci, hours= floor(lower_ci))%&gt;%
+  mutate(minutes = (lower_ci-floor(lower_ci))*60)
+
+upper_ci &lt;- bootstrap %&gt;%
+  summarise (upper_ci, hours= floor(upper_ci))%&gt;%
+  mutate(minutes = (upper_ci-floor(upper_ci))*60)
+
+lower_ci</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   lower_ci hours minutes
+##      &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+## 1     6.41     6    24.9</code></pre>
+<pre class="r"><code>upper_ci</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##   upper_ci hours minutes
+##      &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+## 1     7.53     7    32.0</code></pre>
+<p>We expect the confidence interval to be wider as we try to be more confident with the 99%. The wider the difference between the lower and upper confidence interval, the more sure we are.</p>
+</div>
+</div>

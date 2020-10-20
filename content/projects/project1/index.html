@@ -1,7 +1,7 @@
 ---
 title: "IMDB ratings"
 author: "Max"
-date: "2020-10-17"
+date: "2020-10-19"
 output:
   html_document:
     theme: flatly
@@ -14,8 +14,8 @@ output:
 
 
 
-<div id="imdb-ratings-differences-between-directors" class="section level1">
-<h1>IMDB ratings: Differences between directors</h1>
+<p>This project is a great opportunity to look at the different ratings between two famous movie directors: Steven Spielberg and Tim Burton.</p>
+<p>Could potentially the mean of IMDB ratings for both producers be the same?</p>
 <p><img src="/Users/Maximilien/Documents/LBS MFA 2021/Data Analytics for Finance/my_website2/images/directors.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
 glimpse(movies)</code></pre>
@@ -65,7 +65,7 @@ null_dist %&gt;% visualize() +
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1   0.014</code></pre>
+## 1   0.011</code></pre>
 <pre class="r"><code>CI &lt;- movies_clean %&gt;%
   group_by(director)%&gt;%
   summarise(mean = mean(rating), SE = sd(rating)/sqrt(n()), t_critical = qt(0.975,n()-1),upper = mean + SE*t_critical, lower = mean -SE*t_critical)
@@ -85,13 +85,4 @@ ggplot(CI, aes(x=mean, y=reorder(director, mean)))+
   theme(legend.position = &quot;none&quot;)+
   geom_text(aes(label=round(mean,2), vjust =-2))</code></pre>
 <p><img src="/projects/project1/index_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" />
-&gt;We can reject the null hypothesis because the p value is below 0.05. Consequently Tim Burton and Steven Spielberg are 95% unlikely to have the same mean IBD rating.</p>
-</div>
-<div id="details" class="section level1">
-<h1>Details</h1>
-<ul>
-<li>Who did you collaborate with: Ellie Tsao, Deniz Gokmen, Maximilien De Foresta, Pietro Gobbi, Yi Cao Cao</li>
-<li>Approximately how much time did you spend on this problem set: 12 hours</li>
-<li>What, if anything, gave you the most trouble: Answering % difference GDP question</li>
-</ul>
-</div>
+We can reject the null hypothesis because the p value is below 0.05. Consequently Tim Burton and Steven Spielberg are 95% unlikely to have the same mean IBD rating.</p>

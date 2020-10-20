@@ -1,0 +1,122 @@
+---
+title: "Email Usage"
+author: "Max"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+Let's look at how much time American people spend looking at their emails.
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, include=FALSE}
+
+
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+
+library(infer)
+library(wbstats)
+
+```
+
+
+# General Social Survey (GSS)
+
+
+
+```{r, read_gss_data, cache=TRUE}
+gss <- read_csv(here::here("data", "smallgss2016.csv"), 
+                na = c("", "Don't know",
+                       "No answer", "Not applicable"))
+```
+
+
+## Email usage
+
+
+
+```{r}
+gss$emailmin<-as.numeric(gss$emailmin)
+gss$emailhr<-as.numeric(gss$emailhr)
+gss$email <- rowSums(cbind(gss$emailmin,gss$emailhr*60),na.rm=T)
+gss =  gss %>%
+  na.omit(emailmin)
+```
+
+
+```{r}
+
+mean.email = mean(gss$email)
+median.email= median(gss$email)
+ggplot(gss, aes(x = email)) +
+  geom_density(colour = "blue", fill = "lightblue")+
+  geom_vline(xintercept = mean.email, size = 0.5, colour = "red") +       #add mean line
+    geom_vline(xintercept = median.email, size = 0.5, colour = "green")+geom_text(aes(x=mean.email+270, label=paste0("Mean\n", round(mean.email,1)), y=0.0025)) + #add label to mean
+    geom_text(aes(x=median.email, label=paste0("Median\n", median.email), y=0.0005)) + #add label to median
+    theme_bw() +
+    labs(title = "Most emails answered in 8 hours",
+         x = "Minutes",
+         y = "Density")
+```
+
+
+Median is a better measure of typical among of time Americans spend on email weekly since the density of median is higher than that of mean.
+
+
+```{r}
+bootstrap <- gss %>%
+  specify(response = email)%>%
+  generate(reps= 1000, type= "bootstrap")%>%
+  calculate(stat = "mean")%>%
+  get_ci(level=.95, type = "percentile")
+
+bootstrap$lower_ci <- bootstrap$lower_ci/60
+bootstrap$upper_ci <- bootstrap$upper_ci/60
+
+
+lower_ci <- bootstrap %>%
+  summarise (lower_ci, hours= floor(lower_ci))%>%
+  mutate(minutes = (lower_ci-floor(lower_ci))*60)
+
+upper_ci <- bootstrap %>%
+  summarise (upper_ci, hours= floor(upper_ci))%>%
+  mutate(minutes = (upper_ci-floor(upper_ci))*60)
+
+lower_ci
+upper_ci
+```
+
+We expect the confidence interval to be wider as we try to be more confident with the 99%. The wider the difference between the lower and upper confidence interval, the more sure we are.
+
+
